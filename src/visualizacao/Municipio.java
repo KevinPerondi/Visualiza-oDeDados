@@ -2,17 +2,17 @@ package visualizacao;
 
 public class Municipio {
 
-    private final Long codigo;
+    private final int codigo;
     private final String nome;
     private final String estado;
 
-    public Municipio(Long codigo, String nome, String estado) {
+    public Municipio(int codigo, String nome, String estado) {
         this.codigo = codigo;
         this.nome = nome;
         this.estado = estado;
     }
 
-    public Long getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
@@ -23,4 +23,11 @@ public class Municipio {
     public String getEstado() {
         return estado;
     }
+    
+    public void imprimeMunicipio(){
+        System.out.println("Código: "+this.getCodigo()+
+                            " Nome do Municipio: "+this.getNome()+
+                            " UF: "+this.getEstado());
+    }
+    
 }
