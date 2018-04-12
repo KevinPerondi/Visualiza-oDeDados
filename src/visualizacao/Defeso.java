@@ -23,5 +23,9 @@ public class Defeso {
         return dataFim;
     }
     
-    
+    public void imprimeDefeso(){
+        System.out.println("Portaria: "+this.getPortaria()+
+                            " Data Inicio: "+this.getDataInicio()+
+                            " Data Fim: "+this.getDataFim());
+    }
 }

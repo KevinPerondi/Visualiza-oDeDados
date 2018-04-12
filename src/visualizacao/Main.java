@@ -16,7 +16,10 @@ public class Main {
 
         List<Pescador> pescadores = new ArrayList<>();
         List<Municipio> municipios = new ArrayList<>();
-
+        List<Defeso> defesos = new ArrayList<>();
+        
+        Operations op = new Operations();
+        
         boolean skipFirstLine = true;
         while (scan.hasNextLine()) {
             String line = scan.nextLine();
@@ -34,67 +37,48 @@ public class Main {
                 //System.out.println(line);
                 String[] lineSplitter = line.split(";");
                 int cpf = Integer.parseInt(lineSplitter[3].replace("*", ""));
+                int codigoMunicipio = Integer.parseInt(lineSplitter[6].trim());
+                String portariaDefeso = lineSplitter[9].trim();
+                
+                if (!Operations.containsMunicipio(municipios, codigoMunicipio)) {
+                    Municipio municipio = new Municipio(codigoMunicipio, lineSplitter[7].trim(), lineSplitter[8]);
+                    municipios.add(municipio);
+                    op.insertMunicipio(municipio);
+                }
+
+                if (!Operations.containsDefeso(defesos, portariaDefeso)){
+                    Defeso defeso = new Defeso(portariaDefeso, lineSplitter[10], lineSplitter[11]);
+                    defesos.add(defeso);
+                    op.insertDefeso(defeso);
+                }
+                
                 if (!Operations.containsPescador(pescadores, cpf)) {
                     Pescador pescador = new Pescador(Long.parseLong(lineSplitter[0]), lineSplitter[1],
                             Long.parseLong(lineSplitter[2]), cpf,
                             Long.parseLong(lineSplitter[4]), lineSplitter[5].trim());
                     pescadores.add(pescador);
+                    op.insertPescador(pescador, codigoMunicipio, portariaDefeso);
                 }
 
-                int codigoMunicipio = Integer.parseInt(lineSplitter[6].trim());
-                if (!Operations.containsMunicipio(municipios, codigoMunicipio)){
-                    Municipio municipio = new Municipio(codigoMunicipio, lineSplitter[7].trim(), lineSplitter[8]);
-                    municipios.add(municipio);
-                }
-                
-                
-                /*Parcela parcela = new Parcela(lineSplitter[12], Integer.parseInt(lineSplitter[13]),
+                Parcela parcela = new Parcela(lineSplitter[12], Integer.parseInt(lineSplitter[13]),
                         lineSplitter[14], Operations.getLongFromString(lineSplitter[15]),
                         lineSplitter[16], Operations.getLongFromString(lineSplitter[17]),
-                        Integer.parseInt(lineSplitter[18]), lineSplitter[19]);*/
-
+                        Integer.parseInt(lineSplitter[18]), lineSplitter[19]);
+                op.insertParcela(parcela, cpf);
+                
             }
         }
-        for (Pescador p : pescadores) {
+        /*for (Pescador p : pescadores) {
             p.imprimePescador();
         }
         System.out.println("------------------------------------------------------");
-        for (Municipio m : municipios){
+        for (Municipio m : municipios) {
             m.imprimeMunicipio();
         }
+        
+        System.out.println("------------------------------------------------------");
+        for (Defeso d : defesos) {
+            d.imprimeDefeso();
+        }*/
     }
-}
-
-class Operations {
-
-    public static boolean containsPescador(List<Pescador> list, int cpfPescador) {
-        if (list.isEmpty()) {
-            return false;
-        } else {
-            for (Pescador p : list) {
-                if (p.getCpf() == cpfPescador) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public static Long getLongFromString(String num) throws ParseException {
-        return Long.parseLong(num.trim().substring(0, (num.indexOf(",") - 1)));
-    }
-
-    public static boolean containsMunicipio(List<Municipio> list, int codigoMunicipio) {
-        if (list.isEmpty()) {
-            return false;
-        } else {
-            for (Municipio m : list) {
-                if (m.getCodigo() == codigoMunicipio) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
 }

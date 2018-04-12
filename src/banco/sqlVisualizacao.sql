@@ -1,5 +1,11 @@
+--CREATE DATABASE baseVisualizacao;
+DROP TABLE IF EXISTS Parcela;
+DROP TABLE IF EXISTS Pescador;
+DROP TABLE IF EXISTS Municipio;
+DROP TABLE IF EXISTS Defeso;
+
 CREATE TABLE Municipio (
-    Nome varchar(50),
+    Nome_Mun varchar(50),
     Cod_Municipio int,
     Estado varchar(5),
     CONSTRAINT PK_Municipio PRIMARY KEY (Cod_Municipio)
@@ -15,7 +21,7 @@ CREATE TABLE Defeso (
 
 CREATE TABLE Pescador (
     CPF_pescador int NOT NULL,
-    RGP varchar(15),
+    RGP float,
     PIS float,
     Numero_de_Requerimento int,
     Data_de_Requerimento varchar(10),
@@ -40,3 +46,5 @@ CREATE TABLE Parcela (
     CPF_pescador int references Pescador(CPF_pescador),
     CONSTRAINT PK_Parcela PRIMARY KEY (ID)
 );
+--quantidade de pescadores por estado
+--select COUNT(*),Estado from Pescador P,Municipio M where P.cod_municipio = M.Cod_Municipio group by M.Estado
