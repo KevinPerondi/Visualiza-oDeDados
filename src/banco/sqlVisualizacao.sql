@@ -48,3 +48,22 @@ CREATE TABLE Parcela (
 );
 --quantidade de pescadores por estado
 --select COUNT(*),Estado from Pescador P,Municipio M where P.cod_municipio = M.Cod_Municipio group by M.Estado
+
+--select COUNT(*) from pescador;
+--select COUNT(*) from parcela;
+--select * from parcela limit 5;
+--select SUM(valor_da_parcela:: DOUBLE PRECISION) from parcela limit 2;
+
+/*select COUNT(*),split_part(data_de_saque::text,'/',2) as mes,
+	split_part(data_de_saque::text,'/',3) as ano
+	from parcela
+	group by 2,3
+	order by 2,3;*/
+
+/*select data_de_saque,COUNT(*) from parcela
+group by data_de_saque
+order by data_de_saque;*/
+
+/*select data_de_saque,SUM(valor_da_parcela)::float from parcela
+group by data_de_saque
+order by data_de_saque;*/
