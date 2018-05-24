@@ -16,15 +16,15 @@ public class Operations {
         this.con = this.conexao.getConnection();
     }
 
-    public Connection getCon() {
+    synchronized public Connection getCon() {
         return con;
     }
 
-    public void setCon(Connection con) {
+    synchronized public void setCon(Connection con) {
         this.con = con;
     }
 
-    public static boolean containsPescador(List<Pescador> list, int cpfPescador) {
+    synchronized public static boolean containsPescador(List<Pescador> list, int cpfPescador) {
         if (list.isEmpty()) {
             return false;
         } else {
@@ -37,11 +37,11 @@ public class Operations {
         }
     }
 
-    public static Long getLongFromString(String num) throws ParseException {
+    synchronized public static Long getLongFromString(String num) throws ParseException {
         return Long.parseLong(num.trim().substring(0, (num.indexOf(",") - 1)));
     }
 
-    public static boolean containsMunicipio(List<Municipio> list, int codigoMunicipio) {
+    synchronized public static boolean containsMunicipio(List<Municipio> list, int codigoMunicipio) {
         if (list.isEmpty()) {
             return false;
         } else {
@@ -54,7 +54,7 @@ public class Operations {
         }
     }
 
-    public static boolean containsDefeso(List<Defeso> list, String portaria) {
+    synchronized public static boolean containsDefeso(List<Defeso> list, String portaria) {
         if (list.isEmpty()) {
             return false;
         } else {
