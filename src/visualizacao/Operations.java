@@ -4,7 +4,6 @@ import banco.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Operations {
@@ -68,7 +67,7 @@ public class Operations {
         }
     }
 
-    public void insertPescador(Pescador p, int codMun, String portariaDefeso) {
+    synchronized public void insertPescador(Pescador p, int codMun, String portariaDefeso) {
         try {
             String sql = "INSERT INTO pescador (CPF_pescador, RGP, PIS,"
                     + "Numero_de_Requerimento, Data_de_Requerimento, Nome,"
@@ -89,7 +88,7 @@ public class Operations {
         }
     }
 
-    public void insertMunicipio(Municipio m) {
+    synchronized public void insertMunicipio(Municipio m) {
         try {
             String sql = "INSERT INTO municipio (Nome_Mun, Cod_Municipio, Estado) VALUES (?,?,?)";
             PreparedStatement statement = this.getCon().prepareStatement(sql);
@@ -103,7 +102,7 @@ public class Operations {
         }
     }
 
-    public void insertDefeso(Defeso d) {
+    synchronized public void insertDefeso(Defeso d) {
         try {
             String sql = "INSERT INTO defeso (Portaria, Data_Inicio, Data_Termino) VALUES (?,?,?)";
             PreparedStatement statement = this.getCon().prepareStatement(sql);
@@ -117,7 +116,7 @@ public class Operations {
         }
     }
 
-    public void insertParcela(Parcela p, int cpfPescador) {
+    synchronized public void insertParcela(Parcela p, int cpfPescador) {
         try {
             String sql = "INSERT INTO parcela (Data_Emissao, Num_Parcela, Data_de_Saque,"
                     + " Valor_da_Parcela, Data_de_Restituicao,Valor_da_Restituicao,"
