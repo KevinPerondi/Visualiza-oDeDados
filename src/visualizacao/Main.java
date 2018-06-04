@@ -22,9 +22,9 @@ public class Main {
 
         for (int i = 1; i <= 12; i++) {
             //File file = new File("src/base/SeguroDefeso_" + i + "_2010.csv");
-            String filePath = "/home/suporte/Downloads/base/SeguroDefeso_" + i + "_2010.csv";
+            String filePath = "/home/kevin/Downloads/SeguroDefeso/SeguroDefeso_" + i + "_2010.csv";
             System.out.println("Working on {" + filePath + "}");
-            
+
             File file = new File(filePath);
 
             Scanner scan;
@@ -52,44 +52,57 @@ public class Main {
                         String portariaDefeso = lineSplitter[9].trim();
 
                         if (cpfString.isEmpty() || codMunString.isEmpty() || portariaDefeso.isEmpty()) {
-
+                            continue;
                         } else {
-                            int cpf = Integer.parseInt(cpfString.replace("*", ""));
-                            int codigoMunicipio = Integer.parseInt(codMunString);
-                            if (!Operations.containsMunicipio(municipios, codigoMunicipio)) {
-                                Municipio municipio = new Municipio(codigoMunicipio, lineSplitter[7].trim(), lineSplitter[8]);
-                                municipios.add(municipio);
-                                operations.insertMunicipio(municipio);
+                            int cpf = 0;
+                            try {
+                                cpf = Integer.parseInt(cpfString.replace("*", ""));
+                            } catch (Exception e) {
+                                System.out.println("parse CPF(\""+cpfString+"\"), message: " + e.getMessage());
                             }
+                            if (cpf != 0) {
+                                int codigoMunicipio = 0;
+                                try {
+                                    codigoMunicipio = Integer.parseInt(codMunString);
+                                } catch (Exception e) {
+                                    System.out.println("parse CodMun, message: " + e.getMessage());
+                                }
+                                if (codigoMunicipio != 0) {
+                                    if (!Operations.containsMunicipio(municipios, codigoMunicipio)) {
+                                        Municipio municipio = new Municipio(codigoMunicipio, lineSplitter[7].trim(), lineSplitter[8]);
+                                        municipios.add(municipio);
+                                        operations.insertMunicipio(municipio);
+                                    }
 
-                            if (!Operations.containsDefeso(defesos, portariaDefeso)) {
-                                Defeso defeso = new Defeso(portariaDefeso, lineSplitter[10], lineSplitter[11]);
-                                defesos.add(defeso);
-                                operations.insertDefeso(defeso);
+                                    if (!Operations.containsDefeso(defesos, portariaDefeso)) {
+                                        Defeso defeso = new Defeso(portariaDefeso, lineSplitter[10], lineSplitter[11]);
+                                        defesos.add(defeso);
+                                        operations.insertDefeso(defeso);
+                                    }
+
+                                    if (!Operations.containsPescador(pescadores, cpf)) {
+                                        Pescador pescador = new Pescador(Long.parseLong(lineSplitter[0]), lineSplitter[1],
+                                                Long.parseLong(lineSplitter[2]), cpf,
+                                                Long.parseLong(lineSplitter[4]), lineSplitter[5].trim());
+                                        pescadores.add(pescador);
+                                        operations.insertPescador(pescador, codigoMunicipio, portariaDefeso);
+                                    }
+
+                                    String valorParcela = lineSplitter[15].trim();
+                                    String valorRestituicao = lineSplitter[17].trim();
+
+                                    if (valorParcela.isEmpty() || valorRestituicao.isEmpty()) {
+                                        continue;
+                                    } else {
+
+                                        Parcela parcela = new Parcela(lineSplitter[12], Integer.parseInt(lineSplitter[13]),
+                                                lineSplitter[14], Operations.getLongFromString(valorParcela),
+                                                lineSplitter[16], Operations.getLongFromString(valorRestituicao),
+                                                Integer.parseInt(lineSplitter[18]), lineSplitter[19]);
+                                        operations.insertParcela(parcela, cpf);
+                                    }
+                                }
                             }
-
-                            if (!Operations.containsPescador(pescadores, cpf)) {
-                                Pescador pescador = new Pescador(Long.parseLong(lineSplitter[0]), lineSplitter[1],
-                                        Long.parseLong(lineSplitter[2]), cpf,
-                                        Long.parseLong(lineSplitter[4]), lineSplitter[5].trim());
-                                pescadores.add(pescador);
-                                operations.insertPescador(pescador, codigoMunicipio, portariaDefeso);
-                            }
-
-                            String valorParcela = lineSplitter[15].trim();
-                            String valorRestituicao = lineSplitter[17].trim();
-
-                            if (valorParcela.isEmpty() || valorRestituicao.isEmpty()) {
-
-                            } else {
-
-                                Parcela parcela = new Parcela(lineSplitter[12], Integer.parseInt(lineSplitter[13]),
-                                        lineSplitter[14], Operations.getLongFromString(valorParcela),
-                                        lineSplitter[16], Operations.getLongFromString(valorRestituicao),
-                                        Integer.parseInt(lineSplitter[18]), lineSplitter[19]);
-                                operations.insertParcela(parcela, cpf);
-                            }
-
                         }
 
                     }
@@ -100,7 +113,7 @@ public class Main {
             } catch (ParseException ex) {
                 Logger.getLogger(MonthReader.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            skipFirstLine = true;
         }
 
         /*for (Pescador p : pescadores) {

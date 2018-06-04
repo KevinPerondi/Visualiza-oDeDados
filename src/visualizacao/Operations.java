@@ -38,7 +38,7 @@ public class Operations {
     }
 
     synchronized public static Long getLongFromString(String num) throws ParseException {
-        return Long.parseLong(num.trim().substring(0, (num.indexOf(",") - 1)));
+        return Long.parseLong(num.trim().substring(0, (num.indexOf(","))));
     }
 
     synchronized public static boolean containsMunicipio(List<Municipio> list, int codigoMunicipio) {

@@ -67,3 +67,12 @@ order by data_de_saque;*/
 /*select data_de_saque,SUM(valor_da_parcela)::float from parcela
 group by data_de_saque
 order by data_de_saque;*/
+
+/*
+selecionando todas as parcelas por mes
+
+select substr(data_de_saque::text,4,10) as dataE,valor_da_parcela
+from parcela
+where cod_situacao_parcela = 2 and data_de_saque like '%2010'
+order by dataE;
+*/
